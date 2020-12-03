@@ -1,15 +1,38 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_auth/config/palette.dart';
+import 'package:flutter_auth/screens/home.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:lit_firebase_auth/lit_firebase_auth.dart';
 
 import 'screens/auth/auth.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Material App',
-      home: AuthScreen(),
+    return LitAuthInit(
+      child: MaterialApp(
+        title: 'Material App',
+        theme: ThemeData(
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+          textTheme: GoogleFonts.muliTextTheme(),
+          accentColor: Palette.darkOrange,
+          appBarTheme: const AppBarTheme(
+            brightness: Brightness.dark,
+            color: Palette.darkBlue,
+          ),
+        ),
+        home: LitAuthState(
+          authenticated: HomeScreen(),
+          unauthenticated: AuthScreen(),
+        ),
+      ),
     );
   }
 }
